@@ -2,7 +2,7 @@
 This is a simple file archiver (no compression) written in C++ in my free time just for fun (almost not practically useful).<br>
 Named after my favourite character in iDOLM@STER Hoshii Miki.
 
-# Archive file information
+## Archive file information
 * Extension: ``mka`` (stands for **M**i**k**i**A**rchive)
 * Structure:
     * First ``short``: number of files being archived. Temporarily referred as ``n``.
@@ -13,7 +13,7 @@ Named after my favourite character in iDOLM@STER Hoshii Miki.
         * Next ``size_t``: the filesize. Referred as ``l``.
         * Next ``l`` bytes: file content.
 
-# Commandline arguments
+## Commandline arguments
 * ``-e file_name``: extract from ``file_name``.
 * ``-a file_list``: make an archive from ``file_list``. Must specify ``-o``.
 * ``-d directory``: make an archive from ``directory``. Must specify ``-o``.
