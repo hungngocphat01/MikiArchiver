@@ -17,7 +17,7 @@ Named after my favourite character in iDOLM@STER Hoshii Miki.
 * ``-e file_name``: extract from ``file_name``.
 * ``-a file_list``: make an archive from ``file_list``. Must specify ``-o``.
 * ``-d directory``: make an archive from ``directory``. Must specify ``-o``.
-* ``-o file_name``: save the archive as ``file_name`` (when used with ``-a`` and ``-d).
+* ``-o file_name``: save the archive as ``file_name`` (when used with ``-a`` and ``-d``).
 * ``-o directory``: extract to ``directory`` (when used with ``-e``).
 * ``--chunksize``: specify the chunk size.
 
