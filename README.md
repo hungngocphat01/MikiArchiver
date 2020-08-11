@@ -15,11 +15,11 @@ Named after my favourite character in iDOLM@STER Hoshii Miki.
 
 # Commandline arguments
 * ``-e file_name``: extract from ``file_name``.
-* ``-a file_list``: make archive from ``file_list``. Must specify ``-o``.
-* ``-d directory``: make archive from ``directory``. Must specify ``-o``.
-* ``-o file_name``: save archive as ``file_name``.
+* ``-a file_list``: make an archive from ``file_list``. Must specify ``-o``.
+* ``-d directory``: make an archive from ``directory``. Must specify ``-o``.
+* ``-o file_name``: save the archive as ``file_name`` (when used with ``-a`` and ``-d).
+* ``-o directory``: extract to ``directory`` (when used with ``-e``).
 * ``--chunksize``: specify the chunk size.
-* ``-o path`` (when combined with ``-e``): extract to ``path``.
 
 # Examples
 ```bash
