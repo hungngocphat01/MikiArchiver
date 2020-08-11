@@ -43,6 +43,18 @@ mkarchive buildCurrentDir(string path) {
     return rArchive;
 }
 
+mkarchive buildFromFiles(vector<string> filelst) {
+    mkarchive rArchive;
+
+    for (string filename : filelst) {
+        int delimiter = filename.find_last_of("/\\");
+        mkfile temp = {filename.substr(0, delimiter), filename.substr(delimiter + 1), 0};
+        rArchive.push_back(temp);
+    }
+
+    return rArchive;
+}
+
 inline string err_gen(vector<string> v) {
     string result;
     for (string i : v) {
