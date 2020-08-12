@@ -136,7 +136,8 @@ unsigned extractArchive(string filename, string extract_path) {
     FILE* farchive = fopen(filename.c_str(), "rb");
 
     if (farchive == nullptr) {
-        throw runtime_error("Archive file cannot be opened. Terminating...");
+        cerr << "Error: " << filename << " is corrupted or not exist." << endl;
+        exit(1);
     }
 
     // Read the quantity of files
@@ -164,7 +165,8 @@ unsigned extractArchive(string filename, string extract_path) {
         ifp = fopen(getFullPath(entry).c_str(), "wb");
 
         if (ifp == nullptr) {
-            throw runtime_error(string("Cannot create file: ") + entry.filename);
+            cerr << "Error: cannot create file: " << entry.filename << endl;
+            exit(1);
         }
 
         // Read the filesize
@@ -181,16 +183,16 @@ unsigned extractArchive(string filename, string extract_path) {
             // Read the content
             unsigned short read_bytes = fread(buffer, 1, buffer_size, farchive);
             if (read_bytes != buffer_size) {
-                vector<string> err = {to_string(read_bytes), " bytes read in 1 chunk instead of ", to_string(chunk_size), " while reading ", entry.filename};
-                throw runtime_error(err_gen(err));
+                cerr << "Error: " << read_bytes << " bytes read in 1 chunk instead of " << chunk_size << " while reading " << entry.filename << endl;
+                exit(1);
             }
             // Write the content
             unsigned short wrote_bytes = fwrite(buffer, 1, buffer_size, ifp);
             tbr += wrote_bytes;
 
             if (wrote_bytes != buffer_size) {
-                vector<string> err = {to_string(wrote_bytes), " bytes wrote in 1 chunk instead of ", to_string(chunk_size), " while writing ", entry.filename};
-                throw runtime_error(err_gen(err));
+                cerr << "Error: " << wrote_bytes << " bytes written in 1 chunk instead of " << chunk_size << " while writing " << entry.filename << endl;
+                exit(1);
             }
         }  
         if (ifp != nullptr) {
