@@ -1,0 +1,5 @@
+testdir/
+mk.dSYM/
+.vscode/
+mk
+.DS_Store
