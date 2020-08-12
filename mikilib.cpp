@@ -153,11 +153,8 @@ unsigned extractArchive(mkarchive& archive, string filename, string extract_path
 
     // Read the signal
     char signal[8];
-    char compr_signal[8];
-    memcpy(compr_signal, "MIKIMIKI", 8);
-
     tbr += fread(signal, 1, 8, farchive);
-    if (strcmp(signal, compr_signal) == 0) {
+    if (memcmp(signal, "MIKIMIKI", 8) != 0) {
         cerr << "Error: not a valid MikiArchiver format." << endl;
         exit(1);
     }
