@@ -70,8 +70,15 @@ int main (int argc, char** argv) {
         cout << "Usage: mk [-e|-a|-d] [filename|filenames|path] -o [outfile|outdir]" << endl;
         cout << endl;
         cout << "-e: Extract from archive. Uses -o to specify the output directory." << endl;
-        cout << "-a: Create archive a list of files. Uses -o to specify the output archive filename." << endl;
-        cout << "-d: Create archive a directory. Uses -o to specify the output archive filename." << endl;
+        cout << "-a: Create archive from a list of files. Uses -o to specify the output archive filename." << endl;
+        cout << "-d: Create archive from a directory. Uses -o to specify the output archive filename." << endl < endl;
+        cout << "Example: " << endl;
+        cout << "# Extract from 'myarchive.mka' to 'mydirectory'" << endl;
+        cout << "$ mk -e myarchive.mka -o mydirectory" << endl << endl;
+        cout << "# Make an archive from 'file1.cpp', 'file2.exe' and 'file3.mp4'" << endl;
+        cout << "$ mk -a file1.cpp file2.exe file3.mp4 -o myarchive.mka" << endl << endl;
+        cout << "# Make an archive from 'mydir'" << endl;
+        cout << "$ mk -d mydir -o myarchive.mka" << endl << endl;
     }
 
     delArg(5, &e_arg, &o_arg, &d_arg, &a_arg, &chunksize_arg);
