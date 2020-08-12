@@ -33,4 +33,4 @@ $ mk -e myarchive.mka -o myoutputdir
 
 # Building
 * Simply run ``make`` command in the repository directory.
-* Works fine on Unix-like OSes. Tested on macOS Mojave.
+* Recommended to use only on \*nix. Tested on macOS Mojave.
