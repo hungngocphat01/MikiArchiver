@@ -19,7 +19,7 @@ string getFullPath(mkfile f) {
     return (f.path + "/" + f.filename);
 }
 
-mkarchive buildCurrentDir(string path) {
+mkarchive buildFromDir(string path) {
     DIR* dir = opendir(path.c_str());
     dirent* entry;
     mkarchive rArchive;
@@ -49,6 +49,9 @@ mkarchive buildFromFiles(vector<string> filelst) {
     for (string filename : filelst) {
         int delimiter = filename.find_last_of("/\\");
         mkfile temp = {filename.substr(0, delimiter), filename.substr(delimiter + 1), 0};
+        if (delimiter == -1) {
+            temp.path = "./";
+        }
         rArchive.push_back(temp);
     }
 
@@ -201,4 +204,25 @@ unsigned extractArchive(string filename, string extract_path) {
     }
     fclose(farchive);
     return tbr;
+}
+
+void printArchiveContent(const mkarchive& archive) {
+    unsigned maxfilenamew = archive[0].filename.size();
+    unsigned maxfilesizew = to_string(archive[0].filesize).size();
+
+    for (mkfile file : archive) {
+        if (file.filename.size() > maxfilenamew) {
+            maxfilenamew = file.filename.size();
+        }
+        if (to_string(file.filesize).size() > maxfilesizew) {
+            maxfilesizew = to_string(file.filesize).size();
+        }
+    }
+    maxfilenamew = (maxfilenamew > 30) ? 30 : maxfilenamew;
+    maxfilenamew = (maxfilenamew < 9) ? 9 : maxfilenamew;
+    maxfilesizew = (maxfilesizew < 4) ? 4 : maxfilesizew;
+    for (mkfile file : archive) {
+        cout << setw(maxfilenamew + 2) << "Filename" << setw(maxfilesizew + 2) << "Size" << endl;
+        cout << setw(maxfilenamew + 2) << file.filename << setw(maxfilesizew + 2) << file.filesize << endl;
+    }
 }
