@@ -21,5 +21,5 @@ mkarchive buildFromDir(string path);
 mkarchive buildFromFiles(vector<string> filelst);
 
 unsigned writeArchive(mkarchive& archive, string filename, short chunk_size);
-unsigned extractArchive(string filename, string extract_path);
+unsigned extractArchive(mkarchive& archive, string filename, string extract_path);
 void printArchiveContent(const mkarchive& archive);

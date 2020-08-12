@@ -83,7 +83,7 @@ unsigned writeArchive(mkarchive& archive, string filename, short chunk_size) {
     tbw += fwrite(&chunk_size, 1, sizeof(chunk_size), farchive);
 
     for (unsigned i = 0; i < nfiles; i++) {
-        mkfile entry = archive[i];
+        mkfile& entry = archive[i];
 
         // Read the file
         FILE* ifp = fopen(getFullPath(entry).c_str(), "rb");
@@ -133,7 +133,7 @@ unsigned writeArchive(mkarchive& archive, string filename, short chunk_size) {
     return tbw;
 }
 
-unsigned extractArchive(string filename, string extract_path) {
+unsigned extractArchive(mkarchive& archive, string filename, string extract_path) {
     unsigned tbr = 0; // total bytes written
     // Archive file
     FILE* farchive = fopen(filename.c_str(), "rb");
@@ -201,6 +201,7 @@ unsigned extractArchive(string filename, string extract_path) {
         if (ifp != nullptr) {
             fclose(ifp);
         }
+        archive.push_back(entry);
     }
     fclose(farchive);
     return tbr;
@@ -218,11 +219,18 @@ void printArchiveContent(const mkarchive& archive) {
             maxfilesizew = to_string(file.filesize).size();
         }
     }
+
     maxfilenamew = (maxfilenamew > 30) ? 30 : maxfilenamew;
     maxfilenamew = (maxfilenamew < 9) ? 9 : maxfilenamew;
     maxfilesizew = (maxfilesizew < 4) ? 4 : maxfilesizew;
+
+    cout << left << setw(maxfilenamew + 2) << "Filename" << right << setw(maxfilesizew + 2) << "Size" << endl;
+    for (unsigned i = 0; i < maxfilenamew + maxfilesizew + 4; i++) {
+        cout << "-";
+    }
+    cout << endl;
+    
     for (mkfile file : archive) {
-        cout << setw(maxfilenamew + 2) << "Filename" << setw(maxfilesizew + 2) << "Size" << endl;
-        cout << setw(maxfilenamew + 2) << file.filename << setw(maxfilesizew + 2) << file.filesize << endl;
+        cout << left << setw(maxfilenamew + 2) << file.filename << right << setw(maxfilesizew + 2) << file.filesize << endl;
     }
 }
