@@ -7,8 +7,6 @@ struct argument {
     vector<string> arglst;
 };
 
-argument EMPTY_ARG {"EMPTY"};
-
 vector<argument> parseArguments(int argc, char** argv) {
     vector<argument> presult;
     int curr_arg = -1;
@@ -26,20 +24,11 @@ vector<argument> parseArguments(int argc, char** argv) {
     return presult;
 }
 
-bool ifexist(vector<argument> args, string flag) {
-    for (argument arg : args) {
-        if (arg.flag == flag) {
-            return true;
+argument* getArg(vector<argument>& args, string flag) {
+    for (unsigned i = 0; i < args.size(); i++) {
+        if (args[i].flag == flag) {
+            return &(args[i]);
         }
     }
-    return false;
-}
-
-argument getArg(vector<argument> args, string flag) {
-    for (argument arg : args) {
-        if (arg.flag == flag) {
-            return arg;
-        }
-    }
-    return EMPTY_ARG;
+    return nullptr;
 }
