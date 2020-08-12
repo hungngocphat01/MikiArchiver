@@ -71,7 +71,7 @@ int main (int argc, char** argv) {
         cout << endl;
         cout << "-e: Extract from archive. Uses -o to specify the output directory." << endl;
         cout << "-a: Create archive from a list of files. Uses -o to specify the output archive filename." << endl;
-        cout << "-d: Create archive from a directory. Uses -o to specify the output archive filename." << endl < endl;
+        cout << "-d: Create archive from a directory. Uses -o to specify the output archive filename." << endl << endl;
         cout << "Example: " << endl;
         cout << "# Extract from 'myarchive.mka' to 'mydirectory'" << endl;
         cout << "$ mk -e myarchive.mka -o mydirectory" << endl << endl;
