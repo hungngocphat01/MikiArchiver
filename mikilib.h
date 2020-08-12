@@ -12,7 +12,7 @@ using namespace std;
 struct mkfile {
     string path;
     string filename;
-    size_t filesize = 0;
+    uint64_t filesize = 0;
 };
 
 using mkarchive = vector<mkfile>;
@@ -20,6 +20,6 @@ using mkarchive = vector<mkfile>;
 mkarchive buildFromDir(string path);
 mkarchive buildFromFiles(vector<string> filelst);
 
-unsigned writeArchive(mkarchive& archive, string filename, short chunk_size);
+unsigned writeArchive(mkarchive& archive, string filename, uint16_t chunk_size);
 unsigned extractArchive(mkarchive& archive, string filename, string extract_path);
 void printArchiveContent(const mkarchive& archive);

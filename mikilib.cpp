@@ -66,7 +66,7 @@ inline string err_gen(vector<string> v) {
     return result;
 }
 
-unsigned writeArchive(mkarchive& archive, string filename, short chunk_size) {
+unsigned writeArchive(mkarchive& archive, string filename, uint16_t chunk_size) {
     unsigned tbw = 0; // total bytes written
     // Archive file
     FILE* farchive = fopen(filename.c_str(), "wb");
@@ -76,7 +76,7 @@ unsigned writeArchive(mkarchive& archive, string filename, short chunk_size) {
     }
 
     // Write the quantity of files
-    const short nfiles = static_cast<short>(archive.size());
+    const uint16_t nfiles = static_cast<uint16_t>(archive.size());
     tbw += fwrite(&nfiles, 1, sizeof(nfiles), farchive);
 
     // Write the chunk size
@@ -94,7 +94,7 @@ unsigned writeArchive(mkarchive& archive, string filename, short chunk_size) {
 
         // Write the filename's size
         const char* ifilename = entry.filename.c_str();
-        const short ifilenamel = strlen(ifilename) + 1;
+        const uint16_t ifilenamel = strlen(ifilename) + 1;
         tbw += fwrite(&ifilenamel, 1, sizeof(ifilenamel), farchive);
         // Write the filename
         tbw += fwrite(ifilename, 1, ifilenamel, farchive);
@@ -115,16 +115,16 @@ unsigned writeArchive(mkarchive& archive, string filename, short chunk_size) {
             // Read the content
             unsigned short read_bytes = fread(buffer, 1, buffer_size, ifp);
             if (read_bytes != buffer_size) {
-                vector<string> err = {to_string(read_bytes), " bytes read in 1 chunk instead of ", to_string(chunk_size), " while reading ", entry.filename};
-                throw runtime_error(err_gen(err));
+                cerr << "Error: " << read_bytes << " bytes read in 1 chunk instead of " << chunk_size << " while reading " << entry.filename << endl;
+                exit(1);
             }
             // Write the content
             unsigned short wrote_bytes = fwrite(buffer, 1, buffer_size, farchive);
             tbw += wrote_bytes;
 
             if (wrote_bytes != buffer_size) {
-                vector<string> err = {to_string(wrote_bytes), " bytes wrote in 1 chunk instead of ", to_string(chunk_size), " while writing ", entry.filename};
-                throw runtime_error(err_gen(err));
+                cerr << "Error: " << wrote_bytes << " bytes written in 1 chunk instead of " << chunk_size << " while writing " << entry.filename << endl;
+                exit(1);
             }
         }  
         fclose(ifp);
@@ -144,10 +144,10 @@ unsigned extractArchive(mkarchive& archive, string filename, string extract_path
     }
 
     // Read the quantity of files
-    short nfiles = 0;
+    uint16_t nfiles = 0;
     tbr += fread(&nfiles, 1, sizeof(nfiles), farchive);
 
-    short chunk_size = 0;
+    uint16_t chunk_size = 0;
     // Read the chunk size
     tbr += fread(&chunk_size, 1, sizeof(chunk_size), farchive);
 
@@ -155,7 +155,7 @@ unsigned extractArchive(mkarchive& archive, string filename, string extract_path
         mkfile entry;
 
         // Read the filename's size
-        short ifilenamel = 0;
+        uint16_t ifilenamel = 0;
         tbr += fread(&ifilenamel, 1, sizeof(ifilenamel), farchive);
         // Read the filename
         char ifilename[ifilenamel];
