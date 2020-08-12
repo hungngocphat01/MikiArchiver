@@ -5,12 +5,12 @@ Named after my favourite character in iDOLM@STER Hoshii Miki.
 ## Archive file information
 * Extension: ``mka`` (stands for **M**i**k**i**A**rchive)
 * Structure:
-    * First ``2 bytes (short)``: number of files being archived. Temporarily referred as ``n``.
+    * First ``2 bytes (uint16_t)``: number of files being archived. Temporarily referred as ``n``.
     * Next ``2 bytes``: chunk size.
     * Within next ``n`` blocks:
         * First ``2 bytes``: size of the filename = ``m``.
         * Next ``m`` bytes: the filename.
-        * Next ``4 bytes``: the filesize = ``l``.
+        * Next ``8 bytes (uint64_t)``: the filesize = ``l``.
         * Next ``l`` bytes: file content.
 
 ## Commandline arguments
