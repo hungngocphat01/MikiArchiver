@@ -2,7 +2,8 @@
 
 size_t getFileSize(FILE* fp) {
     if (fp == nullptr) {
-        throw runtime_error("Cannot query filesize. File corrupted or not exist.");
+        cerr << "Cannot query filesize. File corrupted or not exist." << endl;
+        exit(1);
     }
 
     fseek(fp, 0, SEEK_END);
@@ -25,7 +26,8 @@ mkarchive buildFromDir(string path) {
     mkarchive rArchive;
 
     if (dir == nullptr) {
-        throw runtime_error("Cannot open current directory.");
+        cerr << "Cannot open current directory." << endl;
+        exit(1);
     }
 
     do {
@@ -66,14 +68,19 @@ inline string err_gen(vector<string> v) {
     return result;
 }
 
-unsigned writeArchive(mkarchive& archive, string filename, uint16_t chunk_size) {
+unsigned writeArchive(mkarchive& archive, string filename, uint32_t chunk_size) {
     unsigned tbw = 0; // total bytes written
     // Archive file
     FILE* farchive = fopen(filename.c_str(), "wb");
 
     if (farchive == nullptr) {
-        throw runtime_error("Archive file cannot be created. Terminating...");
+        cerr << "Archive file cannot be created. Terminating..." << endl;
+        exit(1);
     }
+
+    char signal[8];
+    memcpy(signal, "MIKIMIKI", 8);
+    tbw += fwrite(signal, 1, 8, farchive);
 
     // Write the quantity of files
     const uint16_t nfiles = static_cast<uint16_t>(archive.size());
@@ -89,7 +96,8 @@ unsigned writeArchive(mkarchive& archive, string filename, uint16_t chunk_size) 
         FILE* ifp = fopen(getFullPath(entry).c_str(), "rb");
 
         if (ifp == nullptr) {
-            throw runtime_error(string("File corrupted or not exist: ") + entry.filename);
+            cerr << "File corrupted or not exist: " << entry.filename << endl;
+            exit(1);
         }
 
         // Write the filename's size
@@ -143,11 +151,22 @@ unsigned extractArchive(mkarchive& archive, string filename, string extract_path
         exit(1);
     }
 
+    // Read the signal
+    char signal[8];
+    char compr_signal[8];
+    memcpy(compr_signal, "MIKIMIKI", 8);
+
+    tbr += fread(signal, 1, 8, farchive);
+    if (strcmp(signal, compr_signal) == 0) {
+        cerr << "Error: not a valid MikiArchiver format." << endl;
+        exit(1);
+    }
+
     // Read the quantity of files
     uint16_t nfiles = 0;
     tbr += fread(&nfiles, 1, sizeof(nfiles), farchive);
 
-    uint16_t chunk_size = 0;
+    uint32_t chunk_size = 0;
     // Read the chunk size
     tbr += fread(&chunk_size, 1, sizeof(chunk_size), farchive);
 
