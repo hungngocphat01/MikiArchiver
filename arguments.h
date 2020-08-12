@@ -1,5 +1,7 @@
 #include <string>
+#include <cstring>
 #include <vector>
+#include <stdarg.h>
 using namespace std;
 
 struct argument {
@@ -7,28 +9,43 @@ struct argument {
     vector<string> arglst;
 };
 
-vector<argument> parseArguments(int argc, char** argv) {
-    vector<argument> presult;
-    int curr_arg = -1;
+argument* getArg(int argc, char** argv, string flag) {
+    argument* result = nullptr;
 
     for (unsigned i = 1; i < argc; i++) {
-        if (argv[i][0] == '-') {
-            argument temp = {string(argv[i])};
-            presult.push_back(temp);
-            curr_arg++;
+        // Encountered the needed flag
+        if (!strcmp(argv[i], flag.c_str())) {
+            if (result == nullptr) {
+                result = new argument;
+                result->flag = flag;
+            }
+            else {
+                cerr << "Duplicated flag: " << flag << endl;
+                exit(1);
+            }
         }
-        else {
-            presult[curr_arg].arglst.push_back(string(argv[i]));
+        // Another flag encountered
+        else if (result != nullptr && argv[i][0] == '-') {
+            break;
+        }
+        // Process the current flag's sub-args
+        else if (result != nullptr && argv[i][0] != '-') {
+            (result->arglst).push_back(string(argv[i]));
         }
     }
-    return presult;
+    return result;
 }
 
-argument* getArg(vector<argument>& args, string flag) {
-    for (unsigned i = 0; i < args.size(); i++) {
-        if (args[i].flag == flag) {
-            return &(args[i]);
+void delArg(int n, ...) {
+    va_list args;
+    va_start(args, n);
+
+    for (unsigned i = 0; i < n; i++) {
+        argument** arg = va_arg(args, argument**);
+        if (*arg != nullptr) {
+            delete *arg; 
         }
     }
-    return nullptr;
+
+    va_end(args);
 }
