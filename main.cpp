@@ -4,6 +4,7 @@
 #define VERSION "2.0"
 
 int main (int argc, char** argv) {
+    mkarchive filelst;
     try {
         vector<argument> args = parseArguments(argc, argv);
 
@@ -13,7 +14,10 @@ int main (int argc, char** argv) {
         // Extract mode
         if (e_arg) {
             if (o_arg) {
-                extractArchive(e_arg->arglst[0], o_arg->arglst[0]);
+                extractArchive(filelst, e_arg->arglst[0], o_arg->arglst[0]);
+
+                cout << "Files extracted." << endl << endl;
+                printArchiveContent(filelst);
             }
             else {
                 throw runtime_error("No outfile specified.");
@@ -31,10 +35,10 @@ int main (int argc, char** argv) {
             }
 
             if (o_arg) {
-                mkarchive filelst = buildFromFiles(a_arg->arglst);
+                filelst = buildFromFiles(a_arg->arglst);
                 writeArchive(filelst, o_arg->arglst[0], chunksize);
 
-                cout << "Archive created." << endl;
+                cout << "Archive created." << endl << endl;
                 printArchiveContent(filelst);
             }
             else {
@@ -52,10 +56,10 @@ int main (int argc, char** argv) {
             }
 
             if (o_arg) {
-                mkarchive filelst = buildFromDir(d_arg->arglst[0]);
+                filelst = buildFromDir(d_arg->arglst[0]);
                 writeArchive(filelst, o_arg->arglst[0], chunksize);
 
-                cout << "Archive created." << endl;
+                cout << "Archive created." << endl << endl;
                 printArchiveContent(filelst);
             }
             else {
